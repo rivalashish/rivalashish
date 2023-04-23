@@ -534,51 +534,202 @@ None
 
 
 
+######### Retrieve details of all the cars built in year 72. #########
+
+print(df.loc[df['model_year'] == 72 ])
+
+
+######### Retrieve details of all the cars built in Japan having 6 cylinders #########
+
+print(df.loc[(df['origin'] == 'japan') & (df['cylinders'] == 6)])
+
+--------------------------------------------------
+
+print("##### Fuel Efficient ######\n")
+print(df.loc[(df['mpg'] >29) & (df['horsepower'] < 93.5) & (df['weight'] < 2500)])
+print("##### Muscle Cars ######\n")
+print(df.loc[(df['displacement'] >262) & (df['horsepower'] > 126) & (df['weight'] > 2800) & (df['weight'] < 3600)])
+print("##### SUV ######\n")
+print(df.loc[(df['horsepower'] > 140) & (df['weight'] > 4500)])
+print("##### RaceCar ######\n")
+print(df.loc[(df['acceleration'] > 17) & (df['weight'] < 2223)])
+
+--------------------------------------------------
+
+
+
+########### Masking Operation ###########
+
+-- The masking operation replaces values where the condition is True.
+
+Syntax:  DataFrame.mask(cond, other = NaN, inplace = False, axis = None)
+
+       cond    – Where cond is False, keep the original value. Where True, replace with corresponding value from other
+       other   - Entries where cond is True are replaced with corresponding value from other.
+       inplace - Whether to perform the operation in place on the data.
+       axis    – alignment axis
+
+## EXAMPLE - The marks of failed students has to be replaced with ‘Fail’    ##
+
+marks = [{'Chemistry': 67, 'Physics': 45, 'Mathematics': 50, 'English' : 19},
+        {'Chemistry': 90, 'Physics': 92, 'Mathematics': 87, 'English' : 90},
+        {'Chemistry': 66, 'Physics': 72, 'Mathematics': 81, 'English' : 72},
+        {'Chemistry': 32, 'Physics': 40, 'Mathematics': 12, 'English' : 68}]
+marks_df = pd.DataFrame(marks, index = ['Subodh', 'Ram', 'Abdul', 'John'])
+f = marks_df < 33
+print(marks_df.mask(f, 'Fail'))
+
+###--- OUTPUT ---###
+
+       Chemistry  Physics Mathematics English
+Subodh        67       45          50    Fail
+Ram           90       92          87      90
+Abdul         66       72          81      72
+John        Fail       40        Fail      68
+
+
+
+
+
+############ Sorting Data ###########
+
+print(df.sort_values(by = 'cylinders'))                                        # ------>>> The data sorted according to the number of cylinders.
+print(df.sort_values(['cylinders'], ascending = 1))                            # ------>>> By default ascending=True
+
+print(df.sort_values(['acceleration', 'horsepower'], ascending = (1,0)))       # ------>>> Data sorted in ascending order of acceleration and descending order of horsepower.
+
+
+
+########### Preserving index ###########
+
+-- Pandas preserves the index and column labels in the output.
+-- For binary operations such as addition and multiplication, Pandas will automatically align indices when passing the objects to the functions.
+-- In Below example -->> The  encrypted marks are with same indices as the original marks. This is called as index preservation.
+
+marks = {'Chemistry': [67,90,66,32],
+        'Physics': [45,92,72,40],
+        'Mathematics': [50,87,81,12],
+        'English': [19,90,72,68]}
+marks_df = pd.DataFrame(marks, index = ['Subodh', 'Ram', 'Abdul', 'John'])
+print(marks_df)
+encrypted_marks = np.sin(marks_df)
+print(encrypted_marks)
+
+
+##### OUTPUT ######
+
+        Chemistry  Physics  Mathematics  English
+Subodh         67       45           50       19
+Ram            90       92           87       90
+Abdul          66       72           81       72
+John           32       40           12       68
+
+        Chemistry   Physics  Mathematics   English
+Subodh  -0.855520  0.850904    -0.262375  0.149877
+Ram      0.893997 -0.779466    -0.821818  0.893997
+Abdul   -0.026551  0.253823    -0.629888  0.253823
+John     0.551427  0.745113    -0.536573 -0.897928
+
+
+########### Resetting Index: ###########
+
+-- In case of a requirement where the index has to be restored to the default index, reset_index() function must be used.
+-- It adds the existing index as a new column in the DataFrame. This can be done as follows:
+
+encrypted_marks.reset_index(inplace = True)
+print(encrypted_marks)
+
+##### OUTPUT ######
+
+    index  Chemistry   Physics  Mathematics   English
+0  Subodh  -0.855520  0.850904    -0.262375  0.149877
+1     Ram   0.893997 -0.779466    -0.821818  0.893997
+2   Abdul  -0.026551  0.253823    -0.629888  0.253823
+3    John   0.551427  0.745113    -0.536573 -0.897928
+
+
+
+########### Apply ###########
+
+-- This method is used to apply a function along an axis of the DataFrame.
+-- Syntax:
+            DataFrame.apply(func, axis = 0, result_type = None)
+                               func : Function to apply to each column or row.[ e.g., np.sum , np.mean ]
+                               axis: Axis along which the function is applied.(0 --> along y axis for column sum , 1 --> along x axis for row sum)
+                               result_type: one out of 'expand', 'reduce' or 'broadcast'. In the demo, 'broadcast' is used.
+-- ‘broadcast’ : results will be broadcast to the original shape of the DataFrame, the original index and columns will be retained.
+
+print(marks_df.apply(np.sum, axis = 1))
+print(marks_df.apply(np.sum, axis = 1, result_type = "broadcast"))
+
+##### OUTPUT ######
+
+Subodh    181
+Ram       359
+Abdul     291
+John      152
+dtype: int64
+
+        Chemistry  Physics  Mathematics  English
+Subodh        181      181          181      181
+Ram           359      359          359      359
+Abdul         291      291          291      291
+John          152      152          152      152
+
+
+
+########### Aggregation operation in Pandas ###########
+
 
 """
 import pandas as pd
+import numpy as np
+df = pd.DataFrame([[54.2,'a'],[658,'d']],
+                  index = list('pq'))
+df.columns = df.index
+print(df.columns.values)
 
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
-
-df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\auto_mpg.csv')
-df.dropna(inplace = True)
-X = df.iloc[:, 1:8]
-#Creating target
-y = df.iloc[:, 0]
-X = pd.get_dummies(X)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
-
-scale = StandardScaler()
-scale.fit_transform(X_train)
-scale.transform(X_test);
-
-#Importing and fitting the model on training set
-reg = LinearRegression()
-#Fitting the model on training data :
-reg.fit(X_train, y_train)
-#Checking the coefficient(slope) and intercept.
-#'m' represents the coefficient and 'c' represents the intercept.
-m = reg.coef_
-c = reg.intercept_
-print(c,m)
-
-#Predicting the target: mpg against the predictors in the training data set
-#Predicted data stored in y_pred_train
-y_pred_train = reg.predict(X_train)
-#Predicting the target: mpg against the predictors in the testing data set
-#Predicted data stored in y_pred_test
-y_pred_test = reg.predict(X_test)
-
-# Prediction Accuracy in terms of how close is the predicted value of target: mpg
-# to the real value in training data set
-r2_S = r2_score(y_train, y_pred_train)
-print(r2_S)
-
-# Prediction Accuracy in terms of how close the predicted value of target: mpg
-# to the real value in testing data set
-from sklearn.metrics import r2_score
-r2_S = r2_score(y_test, y_pred_test)
-print(r2_S)
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler
+# from sklearn.linear_model import LinearRegression
+# from sklearn.metrics import r2_score
+#
+# df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\auto_mpg.csv')
+# df.dropna(inplace = True)
+# X = df.iloc[:, 1:8]
+# #Creating target
+# y = df.iloc[:, 0]
+# X = pd.get_dummies(X)
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+#
+# scale = StandardScaler()
+# scale.fit_transform(X_train)
+# scale.transform(X_test);
+#
+# #Importing and fitting the model on training set
+# reg = LinearRegression()
+# #Fitting the model on training data :
+# reg.fit(X_train, y_train)
+# #Checking the coefficient(slope) and intercept.
+# #'m' represents the coefficient and 'c' represents the intercept.
+# m = reg.coef_
+# c = reg.intercept_
+# print(c,m)
+#
+# #Predicting the target: mpg against the predictors in the training data set
+# #Predicted data stored in y_pred_train
+# y_pred_train = reg.predict(X_train)
+# #Predicting the target: mpg against the predictors in the testing data set
+# #Predicted data stored in y_pred_test
+# y_pred_test = reg.predict(X_test)
+#
+# # Prediction Accuracy in terms of how close is the predicted value of target: mpg
+# # to the real value in training data set
+# r2_S = r2_score(y_train, y_pred_train)
+# print(r2_S)
+#
+# # Prediction Accuracy in terms of how close the predicted value of target: mpg
+# # to the real value in testing data set
+# from sklearn.metrics import r2_score
+# r2_S = r2_score(y_test, y_pred_test)
+# print(r2_S)
