@@ -905,6 +905,49 @@ model_year
 82			16.63871			4.193548		128.870968			81.466667		31.709677		2453.548387
 
 
+
+
+
+
+############### EXERCISE - INFY ###################
+
+                                                                    #Import the data into Python environment as a Pandas DataFrame.
+
+df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\rainfall.csv')
+
+                                                                    #Check for missing values, if any and drop the corresponding rows
+# print(df.info())
+# df.dropna(inplace = True)
+# print(df.info())
+                                                                    #Find the district that gets the highest annual rainfall.
+
+# print(df.sort_values(['ANNUAL'], ascending = 0).head(1).set_index("DISTRICT")[["ANNUAL"]])
+
+                                                                    #Display the top 5 states that get the highest annual rainfall.
+
+# df1=df.sort_values(['ANNUAL'], ascending = 0).set_index("STATE_UT_NAME")[["ANNUAL"]]
+# df1=pd.pivot_table(df1, index = 'STATE_UT_NAME', aggfunc=np.sum).sort_values(['ANNUAL'], ascending = 0).head(5)
+# print(df1)
+
+                                                                    #Drop the columns 'Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'.
+df2=df.loc[ : ,"STATE_UT_NAME":"ANNUAL"]
+
+                                                                    #Display the state-wise mean rainfall for all the months using a pivot table.
+
+df3=pd.pivot_table(df2.loc[ : ,"STATE_UT_NAME":"DEC"], index = 'STATE_UT_NAME', aggfunc=np.mean)
+print(df3)
+
+                                                                    #Display the count of districts in each state.
+
+print(df2.groupby(['STATE_UT_NAME']).count()[['DISTRICT']])
+
+                                                        #For each state, display the district that gets the highest rainfall in May. Also display the recorded rainfall.
+
+df4=df[['STATE_UT_NAME','DISTRICT','MAY']]
+df4=df4.drop_duplicates(subset='STATE_UT_NAME')
+print(df4.set_index('STATE_UT_NAME'))
+
+
 """
 
 import pandas as pd
