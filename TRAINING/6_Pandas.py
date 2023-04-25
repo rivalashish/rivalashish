@@ -1,6 +1,9 @@
 """
 
 #############################  PANDAS  ############################
+pd.set_option('display.max_columns', None) -- To be able to view all the columns.
+pd.set_option('display.max_rows', None)
+
 
 https://pandas.pydata.org/docs/reference/frame.html
 
@@ -655,7 +658,7 @@ print(encrypted_marks)
 -- Syntax:
             DataFrame.apply(func, axis = 0, result_type = None)
                                func : Function to apply to each column or row.[ e.g., np.sum , np.mean ]
-                               axis: Axis along which the function is applied.(0 --> along y axis for column sum , 1 --> along x axis for row sum)
+                               axis: Axis along which the function is applied.(0 --> along y axis for column sum , 1 --> along x axis for row sum)-0(default)
                                result_type: one out of 'expand', 'reduce' or 'broadcast'. In the demo, 'broadcast' is used.
 -- ‘broadcast’ : results will be broadcast to the original shape of the DataFrame, the original index and columns will be retained.
 
@@ -670,7 +673,7 @@ Abdul     291
 John      152
 dtype: int64
 
-        Chemistry  Physics  Mathematics  English
+          Chemistry   Physics   Mathematics  English
 Subodh        181      181          181      181
 Ram           359      359          359      359
 Abdul         291      291          291      291
@@ -680,14 +683,271 @@ John          152      152          152      152
 
 ########### Aggregation operation in Pandas ###########
 
+-- Aggregation operation is used to aggregate using one or more operations over the specified axis.
+-- Syntax:
+          DataFrame.agg(func, axis = 0)
+
+-- func - Function to use for aggregating the data. If a function, must either work when passed a DataFrame or when  passed to DataFrame.apply
+-- axis : If 0 or ‘index’   : apply function to each column.
+          If 1 or ‘columns’ : apply function to each row.
+
+
+#Using list comprehension to get the numerical columns
+list1 = [col for col in df.columns if df[col].dtype in ['float', 'int64']]
+print(df[list1].agg(['min', 'max'],axis = 0))                                # default axis=0 , if not mentioned.
+
+
+      mpg  cylinders  displacement  horsepower  weight  acceleration       model_year
+min   9.0          3          68.0        46.0    1613           8.0          70
+max  46.6          8         455.0       230.0    5140          24.8          82
+
+
+########### Grouping operation in Pandas ###########
+-- In addition to the groupby function, the count function can be used as shown below.
+-- Since, cars are counted by names in each model year, the ‘name’ column in a list is used to get the output as a DataFrame.
+
+print(df.groupby(['model_year']).count()[['name']])
+
+
+            name
+model_year
+70            29
+71            28
+72            28
+73            40
+74            27
+75            30
+76            34
+77            28
+78            36
+79            29
+80            29
+81            29
+82            31
+
+
+
+### Some senior engineers in XYZ custom cars want to understand about the effect of model year and number of cylinders on horsepower.
+
+-- One of the engineers suggests about checking the mean, minimum and maximum horsepower based on number of cylinders and model year.
+-- For such requirement, the ‘agg’ function can be combined with groupby function as shown below:
+
+
+grouped_multiple = df.groupby(['cylinders', 'model_year']).agg({'horsepower': ['mean', 'min', 'max']})  #Creating a DataFrame grouped on cylinders and model_year and finding mean, min and max of horsepower.
+grouped_multiple.columns = ['hp_mean', 'hp_min', 'hp_max']                                              #Naming columns in grouped DataFrame
+grouped_multiple = grouped_multiple.reset_index()                                                       #Resetting index
+print(grouped_multiple)                                                                                 #Viewing head of resulting DataFrame
+
+
+## // OUTPUT // ##
+
+ cylinders  model_year     hp_mean  hp_min  hp_max
+0           3          72   97.000000    97.0    97.0
+1           3          73   90.000000    90.0    90.0
+2           3          77  110.000000   110.0   110.0
+3           3          80  100.000000   100.0   100.0
+4           4          70   87.714286    46.0   113.0
+5           4          71   77.583333    60.0    95.0
+6           4          72   85.142857    54.0   112.0
+7           4          73   82.909091    46.0   112.0
+8           4          74   74.000000    52.0    97.0
+9           4          75   84.916667    53.0   115.0
+10          4          76   75.600000    52.0   102.0
+'''
+'''
+'''
+'''
+'''
+
+
+### The engineers at XYZ Custom Cars want to know about the relationship between model year and acceleration of cars.
+
+-- For better understanding, the grouped results can be sorted based on average acceleration of cars built in each model year.
+
+
+print(df.groupby(['model_year']).mean().sort_values('acceleration', ascending = False)[['acceleration']])
+
+
+## // OUTPUT // ##
+
+
+            acceleration
+model_year
+80             16.934483
+82             16.638710
+81             16.306897
+74             16.203704
+75             16.050000
+76             15.941176
+79             15.813793
+78             15.805556
+77             15.435714
+71             15.142857
+72             15.125000
+73             14.312500
+70             12.948276
+
+
+
+########### Combining Dataframes ###########
+
+Syntax:
+       pd.concat(data1, data2, sort)
+
+-- Consider the following tables of student marks belonging to different sections.
+-- The teacher wants to combine the marks of these students.
+
+
+marks_A = {'Chemistry': [67,90,66,32],'Physics': [45,92,72,40]}
+marks_A_df = pd.DataFrame(marks_A, index = ['Subodh', 'Ram', 'Abdul', 'John'])
+marks_B = {'Chemistry': [72,45,60,98],'Physics': [78,34,72,95]}
+marks_B_df = pd.DataFrame(marks_B, index = ['Nandini', 'Zoya', 'Shivam', 'James'])
+
+pd.concat([marks_A_df,marks_B_df], sort = False)
+
+## // OUTPUT // ##
+
+         Chemistry  Physics
+Subodh          67       45
+Ram             90       92
+Abdul           66       72
+John            32       40
+Nandini         72       78
+Zoya            45       34
+Shivam          60       72
+James           98       95
+
+
+
+-- But , if we want to join two table instead of concat one below other then , we use Merge when both table has atleast one column common.
+-- To resolve the above condition, the merge function can be used which joins two tables based on a key.
+Syntax:
+       pd.merge(data1, data2, how = 'inner')     # how can be defined , by default join is inner join.
+
+
+df1 = pd.DataFrame({'employee': ['Jyoti', 'Sapna', 'Raj', 'Ramaswamy'],
+                    'group': ['Accounting', 'Engineering', 'Engineering', 'HR']})
+df2 = pd.DataFrame({'employee': ['Jyoti', 'Sapna', 'Raj', 'Ramaswamy'],
+                    'hire_date': [2004, 2008, 2012, 2014]})
+df3 = pd.merge(df1,df2)
+print(df3)
+
+## // OUTPUT // ##
+
+    employee        group  hire_date
+0      Jyoti   Accounting       2004
+1      Sapna  Engineering       2008
+2        Raj  Engineering       2012
+3  Ramaswamy           HR       2014
+
+
+
+
+################ Cross Tab ################
+
+-- The engineers at XYZ Custom Cars want to know the frequency distribution of different number of cylinders across different years.
+-- For such given condition, cross tab is used. It gives us a tabular representation of the frequency distribution.
+
+print(pd.crosstab(df['model_year'], df['cylinders']))         # first field is in x-axis and 2nd in y-axis.
+
+## // OUTPUT // ##
+
+cylinders   3   4  5   6   8
+model_year
+70          0   7  0   4  18
+71          0  13  0   8   7
+72          1  14  0   0  13
+73          1  11  0   8  20
+74          0  15  0   7   5
+75          0  12  0  12   6
+76          0  15  0  10   9
+77          1  14  0   5   8
+78          0  17  1  12   6
+79          0  12  1   6  10
+80          1  25  1   2   0
+81          0  21  0   7   1
+82          0  28  0   3   0
+
+
+################ Pivot Table ################
+
+-- A Pivot Table is used to summarise, sort, reorganise, group, count, total or average data stored in a table.
+-- If we want to create spreadsheet-style pivot table as a data frame, pandas provides us with an option.
+
+Syntax :
+       pd.pivot_table(data, index, aggfunc)
+
+data: DataFrame
+index: column to be set as index
+aggfunc: function/list of functions, default = numpy.mean
+
+
+## The engineers at XYZ custom cars want to know the mean of all the numerical attributes of cars for each year
+
+pivot1 = pd.pivot_table(df, index = 'model_year', aggfunc=np.mean)
+print(pivot1)
+
+
+#			acceleration		cylinders		displacement		horsepower		mpg				weight
+model_year
+70			12.948276			6.758621		281.413793			147.827586		17.689655		3372.793103
+71			15.142857			5.571429		209.75				107.037037		21.25			2995.428571
+72			15.125				5.821429		218.375				120.178571		18.714286		3237.714286
+73			14.3125				6.375			256.875				130.475			17.1			3419.025
+74			16.203704			5.259259		171.740741			94.230769		22.703704		2877.925926
+75			16.05				5.6				205.533333			101.066667		20.266667		3176.8
+76			15.941176			5.647059		197.794118			101.117647		21.573529		3078.735294
+77			15.435714			5.464286		191.392857			105.071429		23.375			2997.357143
+78			15.805556			5.361111		177.805556			99.694444		24.061111		2861.805556
+79			15.813793			5.827586		206.689655			101.206897		25.093103		3055.344828
+80			16.934483			4.137931		115.827586			77.481481		33.696552		2436.655172
+81			16.306897			4.62069			135.310345			81.035714		30.334483		2522.931034
+82			16.63871			4.193548		128.870968			81.466667		31.709677		2453.548387
+
 
 """
+
 import pandas as pd
 import numpy as np
-df = pd.DataFrame([[54.2,'a'],[658,'d']],
-                  index = list('pq'))
-df.columns = df.index
-print(df.columns.values)
+
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+                                                                    #Import the data into Python environment as a Pandas DataFrame.
+
+df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\rainfall.csv')
+
+                                                                    #Check for missing values, if any and drop the corresponding rows
+# print(df.info())
+# df.dropna(inplace = True)
+# print(df.info())
+                                                                    #Find the district that gets the highest annual rainfall.
+
+# print(df.sort_values(['ANNUAL'], ascending = 0).head(1).set_index("DISTRICT")[["ANNUAL"]])
+
+                                                                    #Display the top 5 states that get the highest annual rainfall.
+
+# df1=df.sort_values(['ANNUAL'], ascending = 0).set_index("STATE_UT_NAME")[["ANNUAL"]]
+# df1=pd.pivot_table(df1, index = 'STATE_UT_NAME', aggfunc=np.sum).sort_values(['ANNUAL'], ascending = 0).head(5)
+# print(df1)
+
+                                                                    #Drop the columns 'Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'.
+df2=df.loc[ : ,"STATE_UT_NAME":"ANNUAL"]
+
+                                                                    #Display the state-wise mean rainfall for all the months using a pivot table.
+
+df3=pd.pivot_table(df2.loc[ : ,"STATE_UT_NAME":"DEC"], index = 'STATE_UT_NAME', aggfunc=np.mean)
+print(df3)
+
+                                                                    #Display the count of districts in each state.
+
+print(df2.groupby(['STATE_UT_NAME']).count()[['DISTRICT']])
+
+                                                        #For each state, display the district that gets the highest rainfall in May. Also display the recorded rainfall.
+
+df4=df[['STATE_UT_NAME','DISTRICT','MAY']]
+df4=df4.drop_duplicates(subset='STATE_UT_NAME')
+print(df4.set_index('STATE_UT_NAME'))
+
 
 # from sklearn.model_selection import train_test_split
 # from sklearn.preprocessing import StandardScaler
