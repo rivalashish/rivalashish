@@ -598,16 +598,26 @@ print(x)                                                  #  [[3 5 7 7 3]
                                                           #   [5 9 3 3 5]
                                                           #   [9 5 7 9 3]]
 print(type(x))                                            # <class 'numpy.ndarray'>
+
+
+
+
+########### Computations ######
+
+
+a=np.array([10,20,300, 500, 40, 90])                #-->>
+print(np.sum(a))                                    #-->> 960
+print(np.sum(a>30))                                 #-->> 4
+print(np.any(a>30))                                 #-->> True
+
+
+
+
+b=np.array([[0,1,2],[10,11,12],[20,21,22]])
+print(np.sum(b,axis=0))                                 #-->>   [30 33 36]   sum along the column
 """
 
 import numpy as np
 
-steps_arr = [[1, 6012], [2, 7079], [3, 6886], [4, 7230], [5, 4598], [6, 5564], [7, 6971], [8, 7763], [9, 8032],
-             [10, 9569]]
-steps = np.array(steps_arr)
-extra_steps = np.array([0, 2000])
-Total_steps = steps + extra_steps
-
-filter_arr = Total_steps > 9000
-print(Total_steps[filter_arr])
-print(np.sort(Total_steps))
+a=np.array([10,20,300, 500, 40, 90])                #-->>
+print(np.sum(a))
