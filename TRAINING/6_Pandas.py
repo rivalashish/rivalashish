@@ -948,48 +948,89 @@ df4=df4.drop_duplicates(subset='STATE_UT_NAME')
 print(df4.set_index('STATE_UT_NAME'))
 
 
+
+
+################ Pandas plots #################
+
+-- Pandas also provides us options to visualize the data. Here are some of the examples:
+Syntax:
+
+       df.plot(X, y, marker, kind)
+
+       X = value on X axis
+       y = value on y axis
+       marker = shape in case of specific plots like a scatter plot
+       kind = type of plot
+
+
+################ Scatter PLOT:
+
+-- A scatter plot to visualize the trend of acceleration in different years.
+
+df.plot(x = 'model_year', y = 'acceleration', marker = 'o', kind = 'scatter');
+
+
+
+################ Bar PLOT:
+
+--  A bar plot to visualize mean acceleration in different years.
+
+df.groupby('model_year').mean()[['acceleration']].plot(kind = 'bar');
+
+
+-- A bar plot to visualize the sorted mean values of acceleration with respect to number of cylinders.
+
+df.groupby('cylinders').mean().sort_values('acceleration')[['acceleration']].plot(kind = 'bar')
+
+################ HISTOGRAM :
+
+-- A histogram to visualize the frequency distribution of cylinders.
+
+df['cylinders'].plot(kind = 'hist')
+
+
+################ Scatter Plot :
+
+df.plot(x = 'weight', y = 'mpg', marker = 'o',  kind = 'scatter')
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt      #Using matplotlib.pyplot to visualize the image
+import pandas as pd
+
+df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\auto_mpg.csv')
+
+
+a=df.groupby('model_year').mean()[['acceleration']]
+a.plot(kind = 'bar');                                                                               ## Bar PLOT
+df.groupby('cylinders').mean().sort_values('acceleration')[['acceleration']].plot(kind = 'bar')     ## Bar PLOT
+df.plot(x='model_year', y='acceleration', marker='x', kind='scatter');                              ## Scatter
+df.plot(x = 'weight', y = 'mpg', kind = 'scatter')                                                  ## Scatter PLOT
+df['cylinders'].plot(kind = 'hist')                                                                 ## Histogram PLOT
+
+plt.show()
 """
 
-import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt      #Using matplotlib.pyplot to visualize the image
+import pandas as pd
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-                                                                    #Import the data into Python environment as a Pandas DataFrame.
+df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\auto_mpg.csv')
 
-df = pd.read_csv('D:\\INFY COURSE\\PythonForDataScienceCodeData\\rainfall.csv')
 
-                                                                    #Check for missing values, if any and drop the corresponding rows
-# print(df.info())
-# df.dropna(inplace = True)
-# print(df.info())
-                                                                    #Find the district that gets the highest annual rainfall.
+a=df.groupby('model_year').mean()[['acceleration']]
+a.plot(kind = 'bar');                                                                               ## Bar PLOT
+df.groupby('cylinders').mean().sort_values('acceleration')[['acceleration']].plot(kind = 'bar')     ## Bar PLOT
+df.plot(x='model_year', y='acceleration', marker='x', kind='scatter');                              ## Scatter
+df.plot(x = 'weight', y = 'mpg', kind = 'scatter')                                                  ## Scatter PLOT
+df['cylinders'].plot(kind = 'hist')                                                                 ## Histogram PLOT
 
-# print(df.sort_values(['ANNUAL'], ascending = 0).head(1).set_index("DISTRICT")[["ANNUAL"]])
+plt.show()
 
-                                                                    #Display the top 5 states that get the highest annual rainfall.
 
-# df1=df.sort_values(['ANNUAL'], ascending = 0).set_index("STATE_UT_NAME")[["ANNUAL"]]
-# df1=pd.pivot_table(df1, index = 'STATE_UT_NAME', aggfunc=np.sum).sort_values(['ANNUAL'], ascending = 0).head(5)
-# print(df1)
-
-                                                                    #Drop the columns 'Jan-Feb', 'Mar-May', 'Jun-Sep', 'Oct-Dec'.
-df2=df.loc[ : ,"STATE_UT_NAME":"ANNUAL"]
-
-                                                                    #Display the state-wise mean rainfall for all the months using a pivot table.
-
-df3=pd.pivot_table(df2.loc[ : ,"STATE_UT_NAME":"DEC"], index = 'STATE_UT_NAME', aggfunc=np.mean)
-print(df3)
-
-                                                                    #Display the count of districts in each state.
-
-print(df2.groupby(['STATE_UT_NAME']).count()[['DISTRICT']])
-
-                                                        #For each state, display the district that gets the highest rainfall in May. Also display the recorded rainfall.
-
-df4=df[['STATE_UT_NAME','DISTRICT','MAY']]
-df4=df4.drop_duplicates(subset='STATE_UT_NAME')
-print(df4.set_index('STATE_UT_NAME'))
 
 
 # from sklearn.model_selection import train_test_split
