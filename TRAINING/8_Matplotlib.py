@@ -30,4 +30,22 @@ A plot comprises several elements such as title, label, axes, legend etc., that 
 
 -- Apart from these, there are several customizations available for specific plots.
 
+
+
+
+############# Introduction to Matplotlib #############
+
+
+-- Matplotlib is one of the most basic and popular Python libraries used for data visualization.
+-- It was developed for imitating the plotting capabilities of MATLAB.
+
+-- matplotlib.pyplot :
+is used for tow-dimensional graphics in python programming.
+It can be used in python shell, scripts, web application servers, and other graphical user interface toolkits.
+
+-- Matplotlib uses libraries such as NumPy as a base for underlying operations.
+-- Following are the various approaches to plotting in Matplotlib:
+        -- MATLAB way of plotting using matplotlib.plyplot. It is simple to use
+        -- Object-Oriented way of plotting for more control and customization
+
 """
