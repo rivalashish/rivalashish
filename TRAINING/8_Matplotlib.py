@@ -40,7 +40,7 @@ A plot comprises several elements such as title, label, axes, legend etc., that 
 -- It was developed for imitating the plotting capabilities of MATLAB.
 
 -- matplotlib.pyplot :
-is used for tow-dimensional graphics in python programming.
+is used for two-dimensional graphics in python programming.
 It can be used in python shell, scripts, web application servers, and other graphical user interface toolkits.
 
 -- Matplotlib uses libraries such as NumPy as a base for underlying operations.
@@ -48,4 +48,57 @@ It can be used in python shell, scripts, web application servers, and other grap
         -- MATLAB way of plotting using matplotlib.plyplot. It is simple to use
         -- Object-Oriented way of plotting for more control and customization
 
+#importing the required packages
+import matplotlib.pyplot as plt
+import numpy as np
+
+#creating two arrays
+X=np.array([1,2,3,4,5])
+Y=X**2
+
+Now, let us plot the values using matplotlib.pyplot.
+
+Syntax:
+       plt.plot(x, y)
+       x = data on the horizontal axis
+       y = data on the vertical axis
+
+
+
+-- matplotlib.pyplot is the simplest way of plotting.
+-- It creates the default elements like Figure and Axes required and then plots the data.
+-- This approach can be used to plot different kinds of graphs  like Line, Bar, Scatter plots, histogram etc.,
+
+
+
+
+
+########## Object Oriented Interface in Matplotlib ############
+
+-- We can also create the plotting elements using object Oriented approach.
+-- The use of an object-oriented approach is recommended as it gives more control over customization of the plots.
+
+-- Now, let us recreate the plot using object oriented approach following the below steps:
+
+1.Creating a figure
+2.Setting up the axes
+3.Creating a plot using the axes object
+4.Creating multiple plots using the same axes object
+5.Setting up the title, label, and legend for a plot
+
 """
+
+
+#importing the required packages
+import matplotlib.pyplot as plt
+import numpy as np
+
+#creating two arrays
+X=np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
+Y=X**X
+A=X**5
+B=X**5
+C=X**5
+
+plt.plot(X, Y)
+plt.show()

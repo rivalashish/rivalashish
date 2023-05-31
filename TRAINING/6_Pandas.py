@@ -1012,6 +1012,11 @@ df.plot(x = 'weight', y = 'mpg', kind = 'scatter')                              
 df['cylinders'].plot(kind = 'hist')                                                                 ## Histogram PLOT
 
 plt.show()
+
+
+
+
+
 """
 
 import numpy as np
