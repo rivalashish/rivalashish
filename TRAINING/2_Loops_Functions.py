@@ -95,7 +95,7 @@ print(new_squares)
 
 
 
-
+-------------------------------------------------------------------------------------------------------------
 
 
 ######################################## FUNCTIONS ########################################
@@ -257,4 +257,22 @@ myList
   Any changes made are on the original instance of the list.
   Therefore, one should be cautious when passing mutable objects into functions.
 
+
+
+
+########### LAMBDA EXPRESSIONS ###########
+
+-->> Lambda functions are one time use anonymous function , no name attached to it.
+-->> map can be replaced with filter/reduce/zip
+
+
+my_list=[1,2,3]
+print (list(map(lambda item: item*2,my_list)))
+
+
+
 """
+A=['hello', 'World']
+for i in (enumerate(A)):
+    print(A)
+

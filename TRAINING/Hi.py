@@ -36,4 +36,12 @@ Fibonacci()
 Coloured()
 print("hello Mike".find("Mike"));
 
+def Fib(n):
+    print(n)
+    if(n==1):
+        return 0
+    if (n == 2):
+        return 1
+    return Fib(n-1)+Fib(n-2)
 
+print("hello Fib",Fib(10));

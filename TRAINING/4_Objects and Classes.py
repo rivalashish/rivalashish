@@ -77,6 +77,53 @@ RedCircle.add_radius(2)
 print(RedCircle.radius)
 
 
+
+------------------------------------------------------------------
+
+
+
+class PlayerCharacter:
+    membership=True                             # Class Object Attribute
+    def __init__(self,name="",age=0):               ## Constructor for the class
+        if (age>=18 and name!=""):
+            self.name=name                          # Attributes and self refers to Class Player Character
+            self.age=age
+
+    @classmethod  ## class methods
+    def cls_method(cls, num1, num2):
+        return cls("Teddy", num1 + num2)
+
+    @staticmethod  ## static methods -- No direct access to class , so cannot use cls as in @classmethod
+    def stc_method(param1, param2):
+        return param1 + param2
+
+    def run(self):                                  ## instance methods
+        print(f"run -->> {self.name}")
+        print(f'my name is {self.name} and age {self.age}')
+        return "done"
+
+player1=PlayerCharacter("Ashish",26)
+player2=PlayerCharacter("Hardik",21)
+player3=PlayerCharacter()
+player2.attack=50
+help(player1)
+
+print(player1.run())
+print(player2.age)
+print(player2.attack)         # print(player1.attack) won't work
+print(player1.membership)
+print(player2.membership)
+#print(player3.run())         # This is not working as no instantiation for player 3 , so self wont work as age and name by default is diff
+
+
+player4=PlayerCharacter.cls_method(22,3)
+print(player4.run())
+
+print(PlayerCharacter.stc_method(2,3))
+
+https://www.makeuseof.com/tag/python-instance-static-class-methods/
+
+--------------------------------------------------------------------------------------
 """
 import sys
 #
@@ -144,23 +191,27 @@ import sys
 
 class PlayerCharacter:
     membership=True                             # Class Object Attribute
-    def __init__(self,name="",age=0):               # Constructor
+    def __init__(self,name="",age=0):               ## Constructor for the class
         if (age>=18 and name!=""):
             self.name=name                          # Attributes and self refers to Class Player Character
             self.age=age
 
-    def run(self):
+    @classmethod  ## class methods
+    def cls_method(cls, num1, num2):
+        return cls("Teddy", num1 + num2)
+
+    @staticmethod  ## static methods -- No direct access to class , so cannot use cls as in @classmethod
+    def stc_method(param1, param2):
+        return param1 + param2
+
+    def run(self):                                  ## instance methods
         print(f"run -->> {self.name}")
         print(f'my name is {self.name} and age {self.age}')
         return "done"
 
-    @classmethod
-    def cls_method(cls,num1,num2):
-        return cls("Teddy",num1+num2)
 
-    @staticmethod                                   ## No direct access to class , so cannot use cls as in @classmethod
-    def stc_method(param1,param2):
-        return param1+param2
+
+
 
 player1=PlayerCharacter("Ashish",26)
 player2=PlayerCharacter("Hardik",21)

@@ -57,7 +57,7 @@ Tuple2.index("hard rock")  --->>> 3
      List.extend(["pop",10])                ----  will append as two new elements.
      List=[1,2,10.5,"abcd","pop",10]        ---- len(List)=6   
      
-     List.append(["pop",10])                ----  will append as two new elements.
+     List.append(["pop",10])                ----  will append as one new element  .
      List=[1,2,10.5,"abcd",["pop",10[]      ---- len(List)=5 
     
 -- Deletion :
@@ -256,3 +256,14 @@ print("the sum of B is:", sum(B))  -->> 3
 
     
 """
+def freq(string):
+    words = []                                           #step1: A list variable is declared and initialized to an empty list.
+    words = string.split() # or string.lower().split()   #step2: Break the string into list of words
+    Dict = {}                                            #step3: Declare a dictionary
+    word_set=set(words)
+    for key in word_set:                                    #step4: Use for loop to iterate words and values to the dictionary.
+        Dict[key] = words.count(key)
+    print("The Frequency of words is:",Dict)             #step5: Print the dictionary
+
+freq("Mary had a little lamb Little lamb, little lamb Mary had a little lamb.Its fleece was white as snow And everywhere that Mary went Mary went, Mary went \
+Everywhere that Mary went The lamb was sure to go")      #step6: Call function and pass string in it
