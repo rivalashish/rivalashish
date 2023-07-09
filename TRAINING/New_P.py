@@ -29,12 +29,12 @@ class Graph:
 
     def DFSUtil(self, v, visited):
         visited.add(v)
-        # print(v,end=" ")
+        print("\n",v,end=" ")
         for neighbour in self.graph[v]:
             if neighbour not in visited:
                 self.DFSUtil(neighbour, visited)
             else:
-                print("circle is", end=" ")
+                print("\ncircle is", end=" ")
                 print(neighbour, v, end=" ")
                 c = neighbour
                 self.graph.pop(v)
@@ -53,3 +53,21 @@ for i in range(0, F, 2):
     (x, y) = (int(T[i]), int(T[i + 1]))
     g.addEdge(x, y)
 g.DFS()
+
+
+
+
+
+try:
+    b = int(input("Please enter a number to divide a"))
+    a = a/b
+except ZeroDivisionError:
+    print("The number you provided cant divide 1 because it is 0")
+except ValueError:
+    print("You did not provide a number")
+except:
+    print("Something went wrong")
+else:
+    print("success a=",a)
+finally:
+    print("Processing Complete")

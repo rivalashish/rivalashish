@@ -122,3 +122,9 @@ finally:
 
 
 """
+
+try:
+    print(10)
+
+except:
+    print("code to execute if there is an exception")

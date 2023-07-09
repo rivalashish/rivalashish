@@ -91,91 +91,65 @@ the user-defined ones.
 # print("Following is DFS from (starting from vertex 2)")
 # g.DFS(2)
 #
+f = open('inputPS10.txt', 'r')
+T = []
+E = 0  # no of edges
+for line in f:
+    E = E + 1
+    T1 = line.split()
+    (x, y) = T1
+    T = T + T1
+T = list(map(int, T))
+N = set(T)
+V = int(max(N))
 
 
-
-
-
-
-
-# Python3 program to print DFS traversal
-# from a given  graph
-from collections import defaultdict
-
-
-# This class represents a directed graph using
-# adjacency list representation
 class Graph:
+    g = [[0 for x in range(V + 1)] for y in range(V + 1)]
+    ci = []
 
-    # Constructor
-    def __init__(self):
+    def __init__(self, n):
+        self.n = n
 
-        # Default dictionary to store graph
-        self.graph = defaultdict(list)
+    # def display(self):
+    # for x in range(self.n):
+    # for y in range(self.n):
+    # print(" ",self.g[x][y],end=" ")
+    # print()
+    def addedge(self, x, y):
+        self.g[x][y] = 1
 
-    # Function to add an edge to graph
-    def addEdge(self, u, v):
-        self.graph[u].append(v)
+    def OF(self, c1, c2, p, q):
+        for i in range(self.n):
+            if (Graph.g[i][c1] == 1 and i != c2) and (Graph.g[i][p] == 1 or Graph.g[i][q] == 1):
+                # print(i,end=" ")
+                Graph.ci.append(i)
+                self.OF(i, c2, p, q)
 
-    # A function used by DFS
-    def DFSUtil(self, v, visited):
+    print(set(Graph.ci))
 
-        # Mark the current node as visited
-        # and print it
-        visited.add(v)
-        # print(v, end=' ')
-
-        # Recur for all the vertices
-        # adjacent to this vertex
-        for neighbour in self.graph[v]:
-            if neighbour not in visited:
-                self.DFSUtil(neighbour, visited)
-        return visited
-    # The function to do DFS traversal. It uses
-    # recursive DFSUtil()
-    def DFS(self, v):
-
-        # Create a set to store visited vertices
-        visited = set()
-        # Call the recursive helper function
-        # to print DFS traversal
-        a=self.DFSUtil(v, visited)
-        return a
-
-
-
-# Driver's code
+    def DFS(self, start, visited):
+        # print(start, end = ' ')
+        visited[start] = True
+        for i in range(self.n):
+            if (Graph.g[start][i] == 1 and (not visited[i])):
+                self.DFS(i, visited)
+            elif (Graph.g[start][i] == 1 and (visited[i])):
+                # print(i,start,end=" ")
+                Graph.ci.append(i)
+                Graph.ci.append(start)
+                p = i
+                q = start
+                self.OF(i, start, p, q)
 
 
-g = Graph()
-List=[]
-inputFile = "inputPS10.txt"
-outputFile = "outputPS10.txt"
-with open(inputFile, "r") as file1:
-    for line in file1:
-        x, y = line.split()
-        g.addEdge(x, y)
-        if x not in List:
-            List.append(x)
+ob = Graph(V + 1)
+F = len(T)
+for i in range(0, F, 2):
+    (x, y) = (int(T[i]), int(T[i + 1]))
+    ob.addedge(x, y)
 
-
-# Function call
-print(g.graph)
-print(List)
-
-Dict ={}
-
-with open(outputFile, 'w') as writefile:
-    for ele in List:
-        out=g.DFS(ele)
-        Dict[ele] =out
-
-print(Dict)
-# Intersection_Set=Dict[List[0]]
-# for i in range (0,len(List)):
-#     Values=Dict[List[i]]
-#     for num in Values:
-#         if num in Dict.keys():
-#             Verteex=Dict[num]
-#             Intersection_Set = Intersection_Set.intersection(Verteex)
-#             print (Intersection_Set)
+# ob.display()
+v = V + 1
+visited = [False] * v
+ob.DFS(1, visited);

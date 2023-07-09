@@ -26,7 +26,7 @@ A-65 ; Z-90  ; a-97 ; z-122
 
 # Sort the tuple
 
-Ratings=(2,5,99,62,32,31)
+Ratings=(2,55,99,62,32,31)
 RatingsSorted = sorted(Ratings)   // This function does not change Ratings
 RatingsSorted  -->> (2,55,31,32,62,99)
 
